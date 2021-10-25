@@ -5,4 +5,4 @@ on:
 
 jobs:
   call-code-quality:
-    uses: github-actions/main/.github/workflows/code-quality-template.yml@v1 
+    uses: dpbeaumont/github-actions/.github/workflows/code-quality-template.yml@main
