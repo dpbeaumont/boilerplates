@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  call-code-quality:
+  code-quality:
     uses: dpbeaumont/github-actions/.github/workflows/code-quality-template.yml@main
     with:
       working-directory: react-boilerplate
