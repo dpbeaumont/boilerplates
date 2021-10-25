@@ -3,12 +3,8 @@ name: Code Quality
 on:
   workflow_dispatch:
   
-defaults:
-  run:
-    working-directory: react-boilerplate
-
 jobs:
   call-code-quality:
     uses: dpbeaumont/github-actions/.github/workflows/code-quality-template.yml@main
     with:
-      project-directory: react-boilerplate
+      working-directory: react-boilerplate
