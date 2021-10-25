@@ -2,6 +2,10 @@ name: Code Quality
 
 on:
   workflow_dispatch:
+  
+defaults:
+  run:
+    working-directory: react-boilerplate
 
 jobs:
   call-code-quality:
