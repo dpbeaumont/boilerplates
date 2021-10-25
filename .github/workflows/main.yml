@@ -1,0 +1,8 @@
+name: Code Quality
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-code-quality:
+    uses: boilerplates/action-boilerplate/.github/workflows/code-quality-template.yml@v1 
