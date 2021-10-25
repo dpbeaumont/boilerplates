@@ -10,3 +10,5 @@ defaults:
 jobs:
   call-code-quality:
     uses: dpbeaumont/github-actions/.github/workflows/code-quality-template.yml@main
+    with:
+      project-directory: react-boilerplate
