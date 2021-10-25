@@ -1,7 +1,12 @@
 name: Code Quality
 
+name: Call a reusable workflow
+
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
 jobs:
   call-code-quality:
     uses: boilerplates/action-boilerplate/.github/workflows/code-quality-template.yml@v1 
