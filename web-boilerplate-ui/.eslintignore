@@ -1,0 +1,6 @@
+node_modules/
+dist/
+docs/
+.eslintrc.js
+src/__templates__/template.test.js
+*.js
