@@ -1,0 +1,10 @@
+name: Code Quality
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  code-quality:
+    uses: dpbeaumont/github-actions/.github/workflows/code-quality-template.yml@main
+    with:
+      working-directory: react-boilerplate
