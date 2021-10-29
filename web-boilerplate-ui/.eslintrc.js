@@ -1,6 +1,5 @@
 module.exports = {
 	extends: [
-		'@elanco/eslint-config-typescript',
 		'prettier'
 	],
 	plugins: [
