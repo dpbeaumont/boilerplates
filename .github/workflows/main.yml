@@ -7,4 +7,4 @@ jobs:
   code-quality:
     uses: dpbeaumont/github-actions/.github/workflows/code-quality-template.yml@main
     with:
-      working-directory: react-boilerplate
+      working-directory: web-boilerplate-ui
