@@ -3,6 +3,3 @@ dist/
 docs/
 .eslintrc.js
 src/__templates__/template.test.js
-*.js
-*.css
-*.svg
