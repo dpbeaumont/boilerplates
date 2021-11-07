@@ -1,0 +1,55 @@
+name: Build & Deploy Storybook
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "src/stories/**"
+
+jobs:
+  deploy-storybook:
+    name: Deploy Storybook
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
+        continue-on-error: false
+
+      - name: Build Storybook
+        run: yarn build-storybook
+        continue-on-error: false
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to ACR
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Web Image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./web
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:${{ github.sha }}
+            ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:latest
+          build-args: |
+            api_url=${{ secrets.API_URL }}
+            sso_callback=${{ secrets.SSO_CALLBACK }}
+            sso_scopes=${{ secrets.SSO_SCOPES }}
+            kontent_delivery=${{ secrets.KONTENT_DELIVERY }}
+            kontent_preview=${{ secrets.KONTENT_PREVIEW }}
+      - name: "Deploy Web Image to Web App"
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "${{ secrets.WEB_APP_NAME }}"
+          images: "${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY}}:${{ github.sha }}"
