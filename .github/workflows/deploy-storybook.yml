@@ -11,8 +11,9 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     runs-on: ubuntu-latest
-    with:
-      working-directory: storybook-boilerplate-ui
+    defaults:
+      run:
+        working-directory: storybook-boilerplate-ui
     env:
           WEB_IMAGE_REPOSITORY: ui
 
