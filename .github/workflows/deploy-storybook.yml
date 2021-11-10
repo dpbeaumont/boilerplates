@@ -11,8 +11,9 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     runs-on: ubuntu-latest
-    with:
-      working-directory: storybook-boilerplate-ui
+    defaults:
+      run:
+        working-directory: storybook-boilerplate-ui
     env:
           WEB_IMAGE_REPOSITORY: ui
 
@@ -30,23 +31,45 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Login to ACR
-        uses: docker/login-action@v1
+          
+      - uses: azure/docker-login@v1
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
+          login-server: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_LOGIN }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_PASSWORD }}      
 
       - name: Build and push Web Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./storybook-boilerplate-ui
           push: true
           tags: |
             ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:${{ github.sha }}
             ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:latest
             
+      - name: Set Web App ACR authentication
+        uses: Azure/appservice-settings@v1
+        with:
+         app-name: "${{ secrets.WEB_APP_NAME }}"
+         app-settings-json: |
+           [
+             {
+                 "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+                 "value": "${{ secrets.DOCKER_PASSWORD }}",
+                 "slotSetting": false
+             },
+             {
+                 "name": "DOCKER_REGISTRY_SERVER_URL",
+                 "value":  "${{ secrets.DOCKER_REGISTRY }}",
+                 "slotSetting": false
+             },
+             {
+                 "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+                 "value": "${{ secrets.DOCKER_LOGIN }}",
+                 "slotSetting": false
+             }
+           ]          
+           
       - name: "Deploy Web Image to Web App"
         uses: azure/webapps-deploy@v2
         with:
