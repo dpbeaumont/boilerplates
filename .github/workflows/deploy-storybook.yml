@@ -47,12 +47,11 @@ jobs:
             ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:${{ github.sha }}
             ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:latest
             
-      - name: "Deploy Web Image to Web App"
-        uses: azure/webapps-deploy@v2
+      - name: Set Web App ACR authentication
+        uses: Azure/appservice-settings@v1
         with:
-          app-name: "${{ secrets.WEB_APP_NAME }}"
-          images: "${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY}}:${{ github.sha }}"
-          app-settings-json: |
+         app-name: "${{ secrets.WEB_APP_NAME }}"
+         app-settings-json: |
            [
              {
                  "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
@@ -69,4 +68,10 @@ jobs:
                  "value": "${{ secrets.DOCKER_LOGIN }}",
                  "slotSetting": false
              }
-           ]
+           ]          
+           
+      - name: "Deploy Web Image to Web App"
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "${{ secrets.WEB_APP_NAME }}"
+          images: "${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY}}:${{ github.sha }}"
