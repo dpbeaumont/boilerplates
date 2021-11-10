@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     with:
       working-directory: storybook-boilerplate-ui
+    env:
+          WEB_IMAGE_REPOSITORY: ui
 
     steps:
       - uses: actions/checkout@v2
@@ -44,12 +46,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:${{ github.sha }}
             ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:latest
-          build-args: |
-            api_url=${{ secrets.API_URL }}
-            sso_callback=${{ secrets.SSO_CALLBACK }}
-            sso_scopes=${{ secrets.SSO_SCOPES }}
-            kontent_delivery=${{ secrets.KONTENT_DELIVERY }}
-            kontent_preview=${{ secrets.KONTENT_PREVIEW }}
+            
       - name: "Deploy Web Image to Web App"
         uses: azure/webapps-deploy@v2
         with:
