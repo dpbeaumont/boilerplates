@@ -44,8 +44,8 @@ jobs:
           context: ./storybook-boilerplate-ui
           push: true
           tags: |
-            ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:${{ github.sha }}
-            ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}:latest
+            ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}/storybook-ui:${{ github.sha }}
+            ${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY }}/storybook-ui:latest
             
       - name: Set Web App ACR authentication
         uses: Azure/appservice-settings@v1
@@ -74,4 +74,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: "${{ secrets.WEB_APP_NAME }}"
-          images: "${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY}}:${{ github.sha }}"
+          images: "${{ secrets.DOCKER_REGISTRY }}/${{ env.WEB_IMAGE_REPOSITORY}}/storybook-ui:${{ github.sha }}"
